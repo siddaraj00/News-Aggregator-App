@@ -5,7 +5,7 @@ const cors = require("cors");
 const app = express();
 app.use(cors()); // Allows requests from the frontend
 
-const API_KEY = "dec7864e1ae24a8e93a59c99d5e79547"; // Replace with your actual NewsAPI key
+const API_KEY = "103dbc2ab9e842c3b99314cd7708a646"; // Replace with your actual NewsAPI key
 
 app.get("/news", async (req, res) => {
   const apiUrl = `https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=${API_KEY}`;
