@@ -28,10 +28,10 @@ const NewsList = ({ category, searchQuery }) => {
           method: "GET",
           headers: {
             "Accept": "application/json",
-            "User-Agent": "Mozilla/5.0" // Added User-Agent to avoid 426 error
+            "User-Agent": "Mozilla/5.0", // Helps bypass certain API restrictions
           },
         });
-
+        
         if (!response.ok) {
           throw new Error(`HTTP Error: ${response.status}`);
         }
