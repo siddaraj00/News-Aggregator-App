@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const API_KEY = process.env.REACT_APP_NEWS_API_KEY; // Use from .env file
+const API_KEY = process.env.REACT_APP_NEWS_API_KEY; // Ensure this is set
 
 const NewsList = ({ category, searchQuery }) => {
   const [articles, setArticles] = useState([]);
@@ -12,19 +12,34 @@ const NewsList = ({ category, searchQuery }) => {
       setLoading(true);
       setError(null);
 
+      if (!API_KEY) {
+        setError("API key is missing. Check your .env file.");
+        return;
+      }
+
       let url = `https://newsapi.org/v2/top-headlines?country=us&category=${category}&apiKey=${API_KEY}`;
       if (searchQuery) {
         url = `https://newsapi.org/v2/everything?q=${searchQuery}&apiKey=${API_KEY}`;
       }
 
       try {
-        const response = await fetch(url);
+        const response = await fetch(url, {
+          method: "GET",
+          headers: {
+            "Accept": "application/json", // Fix for 426 error
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP Error: ${response.status}`);
+        }
+
         const data = await response.json();
 
         if (data.status === "ok") {
           setArticles(data.articles || []);
         } else {
-          setError("Failed to fetch news. Please try again.");
+          setError(`API Error: ${data.message}`);
         }
       } catch (error) {
         setError("Error fetching news. Check your network.");
