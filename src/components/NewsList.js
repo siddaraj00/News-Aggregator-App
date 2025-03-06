@@ -14,6 +14,7 @@ const NewsList = ({ category, searchQuery }) => {
 
       if (!API_KEY) {
         setError("API key is missing. Check your .env file.");
+        setLoading(false);
         return;
       }
 
@@ -26,7 +27,8 @@ const NewsList = ({ category, searchQuery }) => {
         const response = await fetch(url, {
           method: "GET",
           headers: {
-            "Accept": "application/json", // Fix for 426 error
+            "Accept": "application/json",
+            "User-Agent": "Mozilla/5.0" // Added User-Agent to avoid 426 error
           },
         });
 
@@ -42,7 +44,7 @@ const NewsList = ({ category, searchQuery }) => {
           setError(`API Error: ${data.message}`);
         }
       } catch (error) {
-        setError("Error fetching news. Check your network.");
+        setError("Error fetching news. Check your network and API key.");
         console.error("Fetch Error:", error);
       } finally {
         setLoading(false);
